@@ -18,8 +18,6 @@ with open(logtest,'r') as fp:
     x = len(fp.readlines())
     print('The total amount of requests in the log file is: ', x)
 
-
-
 errorcodes = 0
 redirects = 0
 
@@ -35,6 +33,11 @@ for line in open(logtest):
     if '302 -' in line:
         redirects = redirects + 1
 
+
+z = float(errorcodes)/float(x)
+zz = float(redirects)/float(x)
+
 print("Number of errors reported: " + str(errorcodes))
 print("Number of redirects reported: " + str(redirects))
-
+print("Number of errors reported in percentage form is: " + str(z*100) + ' %')
+print("Number of redirects reported in percentage form is: " + str(zz*100)+ ' %')
