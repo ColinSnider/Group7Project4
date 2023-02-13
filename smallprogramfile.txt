@@ -1,0 +1,26 @@
+import os
+from collections import defaultdict
+from datetime import date, datetime
+from os.path import exists
+
+with open("project3logfile.txt", "r") as f:
+    log_lines = f.readlines()
+    month_lines = defaultdict(list)
+
+    for line in log_lines:
+        for line in log_lines:
+			date_str = line.split()[3][1:]
+			date = datetime.strptime(date_str, '%d/%b/%Y:%H:%M:%S')
+			month = date.month
+
+			month_lines[month].append(line)
+
+    for month, lines in month_lines.items():
+        filename = "logfile_{}.txt".format(month)
+        with open(filename, "w") as f:
+            f.writelines(lines)
+
+if not of.path.exists(filename): 
+    print("Files not found on system. The log file is being split now.")
+else:
+    print("These files are already on your system")
