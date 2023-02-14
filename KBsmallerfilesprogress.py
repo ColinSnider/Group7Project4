@@ -1,28 +1,21 @@
 import os
-from collections import defaultdict
-from datetime import date, datetime
-from os.path import exists
+import re
 
-with open("project3logfile.txt", "r") as f:
-    log_lines = f.readlines()
-    month_lines = defaultdict(list)
+# this section should create 12 different output files
+months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+output_files = {}
+for month in months:
+    output_files[month] = open(f"{month}_log.txt", "w")
 
-    for line in log_lines:
-        # line below this (12) is giving me a hard time with "time data "local" does not match format, nothing else appears to give errors but I'm having a hard time checking
-        date_str = datetime.strptime(line.split()[0], '%d/%b/%Y:%H:%M:%S %z')
-        # line below this is test code I dont want to get rid of yet
-        #date = datetime.strptime(date_str, '%d/%m/%Y:%H:%M:%S')
-        month = date.month
+# this section opens the input log file and read the content inside, extract the month, then write the line to the right output file
+with open("project3logfile.txt", "r") as input_file:
+    for line in input_file:        
+        month_match = re.search(r"\[(\d{2})/(\w{3})/\d{4}", line)
+        if month_match:
+            month = month_match.group(2)
+            output_files[month].write(line)
 
-        month_lines[month].append(line)
-
-    for month, lines in month_lines.items():
-        filename = "logfile_{}.txt".format(month)
-        with open(filename, "w") as f:
-            f.writelines(lines)
-
-# Messed around with having it say if the files are saved or not, very rushed code that doesnt work but wanted to throw it in to see if anyone can figure it out in the meantime
-if not exists(filename): 
-    print("Files not found on system. The log file is being split now.")
-else:
-    print("These files are already on your system")
+# This section will close all output files
+for output_file in output_files.values():
+    output_file.close()
